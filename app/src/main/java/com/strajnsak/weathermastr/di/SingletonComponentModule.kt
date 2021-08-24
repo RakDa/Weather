@@ -1,6 +1,8 @@
 package com.strajnsak.weathermastr.di
 
 import com.strajnsak.weathermastr.data.remote.WeatherApi
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +18,12 @@ object SingletonComponentModule {
     @Provides
     fun provideRetrofit() : Retrofit = Retrofit.Builder()
         .baseUrl("https://meteo.arso.gov.si/uploads/probase/www/observ/surface/text/sl/")
-        //todo dodaj factory za xml parsanje .addConverterFactory()
+        .addConverterFactory(
+            TikXmlConverterFactory.create(
+            TikXml.Builder()
+                .exceptionOnUnreadXml(false)
+                //.addTypeConverter(String.javaClass, HtmlEscapeStringConverter())
+                .build()))
         .build()
 
     @Provides

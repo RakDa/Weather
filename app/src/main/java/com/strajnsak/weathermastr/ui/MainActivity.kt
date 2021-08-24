@@ -8,8 +8,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.Observer
 import com.strajnsak.weathermastr.R
-import com.strajnsak.weathermastr.data.entities.WeatherData
-import com.strajnsak.weathermastr.data.entities.WeatherList
 import com.strajnsak.weathermastr.ui.weather_overview.WeatherOverviewViewModel
 import com.strajnsak.weathermastr.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +24,12 @@ class MainActivity : AppCompatActivity() {
         viewModel.getWeather().observe(this, {
             when (it.status) {
                 Resource.Status.SUCCESS -> {
-                    findViewById<TextView>(R.id.test_text).text = it.data.toString()
+                    var output = ""
+                    for (weatherData in it.data?.weatherDataList!!){
+                        output += weatherData.location+"\n"
+                    }
+                    findViewById<TextView>(R.id.test_text).text = output
+
                 }
                 Resource.Status.ERROR ->
                     Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()

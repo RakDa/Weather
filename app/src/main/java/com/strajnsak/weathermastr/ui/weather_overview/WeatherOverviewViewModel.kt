@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.strajnsak.weathermastr.data.entities.WeatherData
-import com.strajnsak.weathermastr.data.entities.WeatherList
+import com.strajnsak.weathermastr.data.entities.ArsoData
 import com.strajnsak.weathermastr.data.repository.WeatherRepository
 import com.strajnsak.weathermastr.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,11 +17,11 @@ class WeatherOverviewViewModel @Inject constructor (
     private val repository: WeatherRepository
     ) : ViewModel() {
 
-    private val weatherListMutableLiveData: MutableLiveData<Resource<WeatherList>> by lazy {
-        MutableLiveData<Resource<WeatherList>>()
+    private val weatherListMutableLiveData: MutableLiveData<Resource<ArsoData>> by lazy {
+        MutableLiveData<Resource<ArsoData>>()
     }
 
-    fun getWeather(): LiveData<Resource<WeatherList>> {
+    fun getWeather(): LiveData<Resource<ArsoData>> {
         return weatherListMutableLiveData
     }
 
