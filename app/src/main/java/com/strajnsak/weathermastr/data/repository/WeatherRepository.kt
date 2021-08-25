@@ -10,5 +10,8 @@ class WeatherRepository @Inject constructor(
     private val weatherRemoteDataSource: WeatherRemoteDataSource
 ) {
     val latestWeather: Flow<Resource<ArsoData>> = weatherRemoteDataSource.latestWeather
+    suspend fun getLatestWeatherManually():Resource<ArsoData> {
+        return weatherRemoteDataSource.getLatestWeatherManually()
+    }
 }
 

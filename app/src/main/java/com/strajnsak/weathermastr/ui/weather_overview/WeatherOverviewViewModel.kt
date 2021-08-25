@@ -1,13 +1,13 @@
 package com.strajnsak.weathermastr.ui.weather_overview
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strajnsak.weathermastr.data.entities.ArsoData
 import com.strajnsak.weathermastr.data.repository.WeatherRepository
 import com.strajnsak.weathermastr.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,23 +17,22 @@ class WeatherOverviewViewModel @Inject constructor (
     private val repository: WeatherRepository
     ) : ViewModel() {
 
-    private val weatherListMutableLiveData: MutableLiveData<Resource<ArsoData>> by lazy {
-        MutableLiveData<Resource<ArsoData>>()
-    }
-
-    fun getWeather(): LiveData<Resource<ArsoData>> {
-        return weatherListMutableLiveData
-    }
+    private val _arsoData = MutableStateFlow<Resource<ArsoData>>(Resource.loading())
+    val arsoData: StateFlow<Resource<ArsoData>> = _arsoData
 
     init {
         viewModelScope.launch {
-            // Trigger the flow and consume its elements using collect
-            repository.latestWeather.collect() { latestWeatherResource ->
-                weatherListMutableLiveData.postValue(latestWeatherResource)
-                // Update View with the latest favorite news
+            repository.latestWeather.collect() { arsoData ->
+                _arsoData.value = arsoData
             }
         }
     }
 
+    fun forceRefreshData(){
+        viewModelScope.launch {
+            _arsoData.value = Resource.loading()
+            _arsoData.value = repository.getLatestWeatherManually()
+        }
+    }
 
 }

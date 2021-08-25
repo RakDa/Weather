@@ -10,6 +10,10 @@ import javax.inject.Inject
 class WeatherRemoteDataSource @Inject constructor(
     private val weatherApi: WeatherApi
 ): MasterRemoteDataSource() {
+    suspend fun getLatestWeatherManually(): Resource<ArsoData>{
+        return getResult { weatherApi.getWeather() }
+    }
+    //val latestWeather = getResult { weatherApi.getWeather() }
     private val refreshIntervalMs: Long = 30000
     val latestWeather: Flow<Resource<ArsoData>> = flow {
         while(true) {
@@ -19,4 +23,10 @@ class WeatherRemoteDataSource @Inject constructor(
             delay(refreshIntervalMs)
         }
     }
+/*
+    val latestWeatherForcedRefresh: Flow<Resource<ArsoData>> = flow {
+        emit(Resource.loading())
+        val result = getResult { weatherApi.getWeather() }
+        emit(result)
+    }*/
 }
