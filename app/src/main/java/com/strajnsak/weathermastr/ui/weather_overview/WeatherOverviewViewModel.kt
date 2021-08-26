@@ -3,6 +3,7 @@ package com.strajnsak.weathermastr.ui.weather_overview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strajnsak.weathermastr.data.entities.ArsoData
+import com.strajnsak.weathermastr.data.entities.WeatherData
 import com.strajnsak.weathermastr.data.repository.WeatherRepository
 import com.strajnsak.weathermastr.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,7 @@ class WeatherOverviewViewModel @Inject constructor (
 
     private val _arsoData = MutableStateFlow<Resource<ArsoData>>(Resource.loading())
     val arsoData: StateFlow<Resource<ArsoData>> = _arsoData
+    var selectedWeatherData: WeatherData? = null
 
     init {
         viewModelScope.launch {
@@ -33,6 +35,10 @@ class WeatherOverviewViewModel @Inject constructor (
             _arsoData.value = Resource.loading()
             _arsoData.value = repository.getLatestWeatherManually()
         }
+    }
+
+    fun selectWeatherData(weatherData: WeatherData){
+        selectedWeatherData = weatherData
     }
 
 }

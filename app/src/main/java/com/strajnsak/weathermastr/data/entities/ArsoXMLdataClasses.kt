@@ -14,7 +14,7 @@ data class ArsoData(
 @Xml(name = "metData")
 data class WeatherData(
     @PropertyElement(name = "domain_longTitle") val location: String?,
-    @PropertyElement(name = "tsValid_issued") val timeOfMeasurement: String?,
+    @PropertyElement(name = "tsUpdated") val timeOfMeasurement: String?,
     @PropertyElement(name = "nn_icon-wwsyn_icon") val weatherStateIcon: String?,
     @PropertyElement(name = "t_var_unit") val temperatureUnit: String?,
     @PropertyElement(name = "t") val temperature: Int?,

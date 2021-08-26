@@ -5,9 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.weather_overview.WeatherOverviewFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/weatherOverviewRecyclerView"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/weatherOverviewSwipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/weatherOverviewRecyclerView"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
