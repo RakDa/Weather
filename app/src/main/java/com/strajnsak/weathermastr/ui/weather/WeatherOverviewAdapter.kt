@@ -1,4 +1,4 @@
-package com.strajnsak.weathermastr.ui.weather_overview
+package com.strajnsak.weathermastr.ui.weather
 
 import android.view.LayoutInflater
 import android.view.View
@@ -52,9 +52,24 @@ class WeatherOverviewViewHolder(private val itemBinding: ItemWeatherBinding, pri
         if(item.weatherStateIcon != "") {
             Glide.with(itemBinding.root)
                 .load(iconUrlBase + item.weatherStateIcon + "." + iconFormat)
-                .into(itemBinding.weatherItemIcon);
+                .into(itemBinding.weatherItemIcon)
         } else {
             itemBinding.weatherItemIcon.setImageDrawable(null)
+        }
+
+        if(item.windDirectionIcon != ""){
+            Glide.with(itemBinding.root)
+                .load(iconUrlBase + item.windDirectionIcon + "." + iconFormat)
+                .into(itemBinding.weatherItemWindDirectionIcon)
+            val windspeedText = "${item.windSpeed}${item.windSpeedUnit}"
+            itemBinding.weatherItemWindSpeed.text = windspeedText
+            val windDirectionDegreesText = "${item.windDirectionDegrees}°"
+            itemBinding.weatherItemWindDirection.text = windDirectionDegreesText
+        } else {
+            itemBinding.weatherItemWindDirectionIcon.setImageDrawable(null)
+            itemBinding.weatherItemWindSpeed.text = ""
+            itemBinding.weatherItemWindDirection.text = ""
+
         }
 
         /*

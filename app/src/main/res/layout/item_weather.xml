@@ -11,18 +11,22 @@
 
     <TextView
         android:id="@+id/weatherItemLocation"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="Maribor"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/weatherItemWindSpeed"/>
 
     <TextView
         android:id="@+id/weatherItemTimestamp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintTop_toBottomOf="@id/weatherItemLocation"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/weatherItemWindSpeed"
         tools:text="25.8.2021 10:00:00"/>
 
     <ImageView
@@ -42,6 +46,34 @@
         app:layout_constraintTop_toTopOf="@id/weatherItemIcon"
         app:layout_constraintBottom_toBottomOf="@id/weatherItemIcon"
         tools:text="35°C"
+        />
+
+    <ImageView
+        android:id="@+id/weatherItemWindDirectionIcon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintEnd_toStartOf="@id/weatherItemTemperature"
+        app:layout_constraintTop_toTopOf="@id/weatherItemIcon"
+        app:layout_constraintBottom_toBottomOf="@id/weatherItemIcon"
+        tools:src="@drawable/ic_launcher_foreground"/>
+
+    <TextView
+        android:id="@+id/weatherItemWindSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/weatherItemWindDirectionIcon"
+        app:layout_constraintTop_toTopOf="@id/weatherItemIcon"
+        app:layout_constraintBottom_toTopOf="@id/weatherItemWindDirection"
+        tools:text="5.5 m/s"
+        />
+    <TextView
+        android:id="@+id/weatherItemWindDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/weatherItemWindDirectionIcon"
+        app:layout_constraintTop_toBottomOf="@id/weatherItemWindSpeed"
+        app:layout_constraintBottom_toBottomOf="@id/weatherItemIcon"
+        tools:text="101°"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

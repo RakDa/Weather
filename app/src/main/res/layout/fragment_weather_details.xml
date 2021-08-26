@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="ui.weather_detail.WeatherDetailsFragment">
+    tools:context=".ui.weather.WeatherDetailsFragment">
 
     <LinearLayout
         android:id="@+id/weatherDetailsContainer"
@@ -29,6 +29,12 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             tools:text="20.10.2020 11:11" />
+        <ImageView
+            android:id="@+id/weatherDetailsIcon"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            tools:src="@drawable/ic_launcher_foreground"/>
+
         <TextView
             android:id="@+id/weatherDetailsTemperature"
             android:layout_width="wrap_content"
@@ -36,6 +42,27 @@
             android:gravity="center"
             tools:text="20°C"
             android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/weatherDetailsWindDirectionIcon"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            tools:src="@drawable/ic_launcher_foreground"/>
+
+        <TextView
+            android:id="@+id/weatherDetailsWindDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="101°"
+            android:textSize="20sp" />
+        <TextView
+            android:id="@+id/weatherDetailsWindSpeed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="10.0m/s"
+            android:textSize="20sp" />
     </LinearLayout>
 
 

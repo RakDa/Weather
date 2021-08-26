@@ -1,4 +1,4 @@
-package com.strajnsak.weathermastr.ui.weather_overview
+package com.strajnsak.weathermastr.ui.weather
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collect
 class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOverviewListener {
     private var _binding: FragmentWeatherOverviewBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: WeatherOverviewViewModel by activityViewModels()
+    private val viewModel: WeatherViewModel by activityViewModels()
     private lateinit var adapter: WeatherOverviewAdapter
 
 

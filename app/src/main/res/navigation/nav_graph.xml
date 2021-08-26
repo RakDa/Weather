@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/weatherOverviewFragment"
-        android:name="com.strajnsak.weathermastr.ui.weather_overview.WeatherOverviewFragment"
+        android:name="com.strajnsak.weathermastr.ui.weather.WeatherOverviewFragment"
         android:label="fragment_weather_overview"
         tools:layout="@layout/fragment_weather_overview" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/weatherDetailsFragment"
-        android:name="com.strajnsak.weathermastr.ui.weather_detail.WeatherDetailsFragment"
+        android:name="com.strajnsak.weathermastr.ui.weather.WeatherDetailsFragment"
         android:label="fragment_weather_details"
         tools:layout="@layout/fragment_weather_details" />
 </navigation>

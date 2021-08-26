@@ -1,4 +1,4 @@
-package com.strajnsak.weathermastr.ui.weather_overview
+package com.strajnsak.weathermastr.ui.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WeatherOverviewViewModel @Inject constructor (
+class WeatherViewModel @Inject constructor (
     private val repository: WeatherRepository
     ) : ViewModel() {
 
@@ -39,6 +39,14 @@ class WeatherOverviewViewModel @Inject constructor (
 
     fun selectWeatherData(weatherData: WeatherData){
         selectedWeatherData = weatherData
+    }
+
+    fun getIconUrlBase(): String?{
+        return arsoData.value.data?.iconUrlBase
+    }
+
+    fun getIconFormat(): String?{
+        return arsoData.value.data?.iconFormat
     }
 
 }
