@@ -32,24 +32,30 @@ class WeatherDetailsFragment : Fragment() {
     private fun setupView(){
         val item = viewModel.selectedWeatherData
         if(item != null) {
-            binding.weatherDetailsLocation.text = item.location
+            binding.weatherDetailsLocation.text = item.compositeTimeOfMeasurementLocation.location
             val temperature = "${item.temperature}${item.temperatureUnit}"
             binding.weatherDetailsTemperature.text = temperature
-            binding.weatherDetailsTimeOfMeasurement.text = item.timeOfMeasurement
+            binding.weatherDetailsTimeOfMeasurement.text = item.compositeTimeOfMeasurementLocation.timeOfMeasurement
 
-            val iconUrlBase = viewModel.getIconUrlBase();
-            val iconFormat = viewModel.getIconFormat();
-            if(item.weatherStateIcon != "" && iconUrlBase != null && iconFormat != null) {
+            var trend = "enako"
+            when {
+                (item.trend == -1) -> trend = "dol"
+                (item.trend == 1) -> trend = "gor"
+            }
+
+            binding.weatherDetailsTrend.text = trend
+
+            if(item.weatherStateIconUrl != "") {
                 Glide.with(binding.root)
-                    .load(iconUrlBase + item.weatherStateIcon + "." + iconFormat)
+                    .load(item.weatherStateIconUrl)
                     .into(binding.weatherDetailsIcon)
             } else {
                 binding.weatherDetailsIcon.setImageDrawable(null)
             }
 
-            if(item.windDirectionIcon != "" && iconUrlBase != null && iconFormat != null){
+            if(item.windDirectionIconUrl != ""){
                 Glide.with(binding.root)
-                    .load(iconUrlBase + item.windDirectionIcon + "." + iconFormat)
+                    .load(item.windDirectionIconUrl)
                     .into(binding.weatherDetailsWindDirectionIcon)
                 val windspeedText = "${item.windSpeed}${item.windSpeedUnit}"
                 binding.weatherDetailsWindSpeed.text = windspeedText
@@ -66,5 +72,10 @@ class WeatherDetailsFragment : Fragment() {
         } else {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

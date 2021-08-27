@@ -43,6 +43,14 @@
             tools:text="20°C"
             android:textSize="30sp" />
 
+        <TextView
+            android:id="@+id/weatherDetailsTrend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            tools:text="enako"
+            android:textSize="20sp" />
+
         <ImageView
             android:id="@+id/weatherDetailsWindDirectionIcon"
             android:layout_width="80dp"

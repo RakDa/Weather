@@ -2,7 +2,6 @@ package com.strajnsak.weathermastr.ui.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.strajnsak.weathermastr.data.entities.ArsoData
 import com.strajnsak.weathermastr.data.entities.WeatherData
 import com.strajnsak.weathermastr.data.repository.WeatherRepository
 import com.strajnsak.weathermastr.util.Resource
@@ -14,39 +13,49 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WeatherViewModel @Inject constructor (
+class WeatherViewModel @Inject constructor(
     private val repository: WeatherRepository
-    ) : ViewModel() {
+) : ViewModel() {
 
-    private val _arsoData = MutableStateFlow<Resource<ArsoData>>(Resource.loading())
-    val arsoData: StateFlow<Resource<ArsoData>> = _arsoData
+    private val _arsoData = MutableStateFlow<Resource<List<WeatherData>>>(Resource.loading())
+    val arsoData: StateFlow<Resource<List<WeatherData>>> = _arsoData
     var selectedWeatherData: WeatherData? = null
 
     init {
         viewModelScope.launch {
-            repository.latestWeather.collect() { arsoData ->
-                _arsoData.value = arsoData
-            }
+            repository.latestWeather
+                .collect() { arsoData ->
+                    _arsoData.value = arsoData
+                }
         }
     }
 
-    fun forceRefreshData(){
+    fun getCachedData() {
+        viewModelScope.launch {
+            _arsoData.value = Resource.loading()
+            _arsoData.value = repository.getCachedWeatherData()
+        }
+    }
+
+    suspend fun getAverageTemperatureLast30minutesForLocation(location:String): Int {
+        return repository.getAverageTemperatureLast30minutesForLocation(location)
+    }
+
+    suspend fun cacheForLocationLast30minutesExists(location:String): Boolean {
+        return repository.cacheForLocationLast30minutesExists(location)
+    }
+
+    fun cacheWeatherData(weatherDataList: List<WeatherData>){
+        viewModelScope.launch {
+            repository.cacheWeatherData(weatherDataList)
+        }
+    }
+
+    fun forceRefreshData() {
         viewModelScope.launch {
             _arsoData.value = Resource.loading()
             _arsoData.value = repository.getLatestWeatherManually()
         }
-    }
-
-    fun selectWeatherData(weatherData: WeatherData){
-        selectedWeatherData = weatherData
-    }
-
-    fun getIconUrlBase(): String?{
-        return arsoData.value.data?.iconUrlBase
-    }
-
-    fun getIconFormat(): String?{
-        return arsoData.value.data?.iconFormat
     }
 
 }

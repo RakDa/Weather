@@ -18,6 +18,8 @@ import com.strajnsak.weathermastr.databinding.FragmentWeatherOverviewBinding
 import com.strajnsak.weathermastr.util.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.transform
 
 
 @AndroidEntryPoint
@@ -61,14 +63,31 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
     private fun setupFlowCollection() {
         lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.arsoData.collect {
+                viewModel.arsoData.
+                    map {
+                        if(it.status == Resource.Status.SUCCESS && it.data != null) {
+                            for(weatherData in it.data) {
+                                if(viewModel.cacheForLocationLast30minutesExists(weatherData.compositeTimeOfMeasurementLocation.location)) {
+                                    weatherData.averageLast30Minutes =
+                                        viewModel.getAverageTemperatureLast30minutesForLocation(
+                                            weatherData.compositeTimeOfMeasurementLocation.location
+                                        )
+                                }}
+                            Resource.success(it.data)
+                        } else it
+                    }
+                    .collect {
                     when (it.status) {
                         Resource.Status.SUCCESS -> {
-                            it.data?.let { it1 -> adapter.setItems(it1) }
+                            if(it.data != null) {
+                                adapter.setItems(it.data)
+                                viewModel.cacheWeatherData(it.data)
+                            }
+
                             binding.weatherOverviewSwipeRefresh.isRefreshing = false
                         }
                         Resource.Status.ERROR -> {
-
+                            viewModel.getCachedData()
                             Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                             binding.weatherOverviewSwipeRefresh.isRefreshing = false
                         }
@@ -87,6 +106,11 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
         findNavController().navigate(
             R.id.action_weatherOverviewFragment_to_weatherDetailsFragment
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }
