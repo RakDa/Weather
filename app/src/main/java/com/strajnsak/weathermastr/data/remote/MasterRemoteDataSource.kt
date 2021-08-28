@@ -9,7 +9,7 @@ abstract class MasterRemoteDataSource {
             val response = call()
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) return Resource.success(body)
+                if (body != null) return Resource.Success(body)
             }
             return error(" ${response.code()} ${response.message()}")
         } catch (e: Exception) {
@@ -18,6 +18,6 @@ abstract class MasterRemoteDataSource {
     }
 
     private fun <T> error(message: String): Resource<T> {
-        return Resource.error("Api call failed - $message")
+        return Resource.Error("Api call failed - $message")
     }
 }

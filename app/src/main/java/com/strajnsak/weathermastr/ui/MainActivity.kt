@@ -11,11 +11,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        /*
-        findViewById<Button>(R.id.reload_button).setOnClickListener {
-            viewModel.forceRefreshData()
-        }*/
-
     }
 }

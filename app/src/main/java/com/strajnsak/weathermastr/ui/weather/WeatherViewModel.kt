@@ -17,7 +17,7 @@ class WeatherViewModel @Inject constructor(
     private val repository: WeatherRepository
 ) : ViewModel() {
 
-    private val _arsoData = MutableStateFlow<Resource<List<WeatherData>>>(Resource.loading())
+    private val _arsoData = MutableStateFlow<Resource<List<WeatherData>>>(Resource.Loading)
     val arsoData: StateFlow<Resource<List<WeatherData>>> = _arsoData
     var selectedWeatherData: WeatherData? = null
 
@@ -32,7 +32,7 @@ class WeatherViewModel @Inject constructor(
 
     fun getCachedData() {
         viewModelScope.launch {
-            _arsoData.value = Resource.loading()
+            _arsoData.value = Resource.Loading
             _arsoData.value = repository.getCachedWeatherData()
         }
     }
@@ -53,7 +53,7 @@ class WeatherViewModel @Inject constructor(
 
     fun forceRefreshData() {
         viewModelScope.launch {
-            _arsoData.value = Resource.loading()
+            _arsoData.value = Resource.Loading
             _arsoData.value = repository.getLatestWeatherManually()
         }
     }

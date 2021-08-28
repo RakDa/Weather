@@ -15,22 +15,21 @@ class WeatherRemoteDataSource @Inject constructor(
 
     suspend fun getLatestWeatherManually(): Resource<List<WeatherData>> {
         val result = getResult { weatherApi.getWeather() }
-        if (result.status == Resource.Status.SUCCESS && result.data != null) {
-            return Resource.success(covertArsoDataXMLtoWeatherDataList(result.data))
+        if (result is Resource.Success) {
+            return Resource.Success(covertArsoDataXMLtoWeatherDataList(result.data))
         }
-        return Resource.error(result.message.toString())
-
+        return Resource.Error((result as Resource.Error).message);
     }
 
     private val refreshIntervalMs: Long = 30000
     val latestWeather: Flow<Resource<List<WeatherData>>> = flow {
         while (true) {
-            emit(Resource.loading())
+            emit(Resource.Loading)
             val result = getResult { weatherApi.getWeather() }
-            if (result.status == Resource.Status.SUCCESS && result.data != null) {
-                emit(Resource.success(covertArsoDataXMLtoWeatherDataList(result.data)))
-            } else if (result.status == Resource.Status.ERROR && result.message != null) {
-                emit(Resource.error(result.message))
+            if (result is Resource.Success) {
+                emit(Resource.Success(covertArsoDataXMLtoWeatherDataList(result.data)))
+            } else if (result is Resource.Error) {
+                emit(Resource.Error(result.message))
             }
             delay(refreshIntervalMs)
         }

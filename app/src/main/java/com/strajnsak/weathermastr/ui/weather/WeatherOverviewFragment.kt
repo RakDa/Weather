@@ -65,7 +65,7 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.arsoData.
                     map {
-                        if(it.status == Resource.Status.SUCCESS && it.data != null) {
+                        if(it is Resource.Success) {
                             for(weatherData in it.data) {
                                 if(viewModel.cacheForLocationLast30minutesExists(weatherData.compositeTimeOfMeasurementLocation.location)) {
                                     weatherData.averageLast30Minutes =
@@ -73,26 +73,23 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
                                             weatherData.compositeTimeOfMeasurementLocation.location
                                         )
                                 }}
-                            Resource.success(it.data)
+                            Resource.Success(it.data)
                         } else it
                     }
                     .collect {
-                    when (it.status) {
-                        Resource.Status.SUCCESS -> {
-                            if(it.data != null) {
-                                adapter.setItems(it.data)
-                                viewModel.cacheWeatherData(it.data)
-                            }
-
+                    when (it){
+                        is Resource.Success -> {
+                            adapter.setItems(it.data)
+                            viewModel.cacheWeatherData(it.data)
                             binding.weatherOverviewSwipeRefresh.isRefreshing = false
                         }
-                        Resource.Status.ERROR -> {
+                        is Resource.Error -> {
                             viewModel.getCachedData()
                             Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                             binding.weatherOverviewSwipeRefresh.isRefreshing = false
                         }
 
-                        Resource.Status.LOADING -> {
+                        is Resource.Loading -> {
                             binding.weatherOverviewSwipeRefresh.isRefreshing = true
                         }
                     }
