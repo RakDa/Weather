@@ -3,7 +3,6 @@ package com.strajnsak.weathermastr.data.entities
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.tickaroo.tikxml.annotation.PropertyElement
 
 @Entity
 data class WeatherData(

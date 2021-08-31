@@ -5,12 +5,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.strajnsak.weathermastr.data.entities.WeatherData
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDataDao {
     @Query("SELECT * FROM weatherdata WHERE insertionTimeInMilliseconds = (SELECT MAX(insertionTimeInMilliseconds) FROM weatherdata)")
     suspend fun getLatestWeatherData(): List<WeatherData>
+
+    @Query("SELECT * FROM weatherdata WHERE location = :location AND insertionTimeInMilliseconds = (SELECT MAX(insertionTimeInMilliseconds) FROM weatherdata WHERE location = :location)")
+    suspend fun getLatestWeatherDataForLocation(location: String): WeatherData?
 
     @Query("SELECT AVG(temperature) FROM weatherdata WHERE location = :location AND insertionTimeInMilliseconds > :timestampMilliseconds")
     suspend fun getAverageTemperatureForLocationSinceTimestamp(location: String, timestampMilliseconds: Long): Int

@@ -3,40 +3,23 @@ package com.strajnsak.weathermastr.data.remote
 import com.strajnsak.weathermastr.data.entities.ArsoDataXML
 import com.strajnsak.weathermastr.data.entities.CompositeTimeOfMeasurementLocation
 import com.strajnsak.weathermastr.data.entities.WeatherData
-import com.strajnsak.weathermastr.util.Resource
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.strajnsak.weathermastr.util.ResultWrapper
 import javax.inject.Inject
 
 class WeatherRemoteDataSource @Inject constructor(
     private val weatherApi: WeatherApi
 ) : MasterRemoteDataSource() {
 
-    suspend fun getLatestWeatherManually(): Resource<List<WeatherData>> {
-        val result = getResult { weatherApi.getWeather() }
-        if (result is Resource.Success) {
-            return Resource.Success(covertArsoDataXMLtoWeatherDataList(result.data))
-        }
-        return Resource.Error((result as Resource.Error).message)
-    }
-
-    private val refreshIntervalMs: Long = 30000
-    val latestWeather: Flow<Resource<List<WeatherData>>> = flow {
-        while (true) {
-            emit(Resource.Loading)
-            val result = getResult { weatherApi.getWeather() }
-            if (result is Resource.Success) {
-                emit(Resource.Success(covertArsoDataXMLtoWeatherDataList(result.data)))
-            } else if (result is Resource.Error) {
-                emit(Resource.Error(result.message))
-            }
-            delay(refreshIntervalMs)
+    suspend fun getLatestWeather(): ResultWrapper<List<WeatherData>> {
+        return when(val result = getResult { weatherApi.getWeather() }) {
+            is ResultWrapper.Success ->
+                ResultWrapper.Success(convertArsoDataXMLtoWeatherDataList(result.data))
+            is ResultWrapper.Error ->
+                ResultWrapper.Error(result.message)
         }
     }
 
-
-    private fun covertArsoDataXMLtoWeatherDataList(arsoData: ArsoDataXML): List<WeatherData> {
+    private fun convertArsoDataXMLtoWeatherDataList(arsoData: ArsoDataXML): List<WeatherData> {
         val weatherDataList = ArrayList<WeatherData>()
         val systemCurrentTimeMilliseconds = System.currentTimeMillis()
 

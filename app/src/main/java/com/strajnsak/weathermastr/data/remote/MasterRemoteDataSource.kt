@@ -1,15 +1,15 @@
 package com.strajnsak.weathermastr.data.remote
 
-import com.strajnsak.weathermastr.util.Resource
+import com.strajnsak.weathermastr.util.ResultWrapper
 import retrofit2.Response
 
 abstract class MasterRemoteDataSource {
-    protected suspend fun <T> getResult(call: suspend () -> Response<T>): Resource<T> {
+    protected suspend fun <T> getResult(call: suspend () -> Response<T>): ResultWrapper<T> {
         try {
             val response = call()
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) return Resource.Success(body)
+                if (body != null) return ResultWrapper.Success(body)
             }
             return error(" ${response.code()} ${response.message()}")
         } catch (e: Exception) {
@@ -17,7 +17,7 @@ abstract class MasterRemoteDataSource {
         }
     }
 
-    private fun <T> error(message: String): Resource<T> {
-        return Resource.Error("Api call failed - $message")
+    private fun <T> error(message: String): ResultWrapper<T> {
+        return ResultWrapper.Error("Api call failed - $message")
     }
 }
