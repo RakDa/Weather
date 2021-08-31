@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.strajnsak.weathermastr.R
 import com.strajnsak.weathermastr.databinding.FragmentWeatherDetailsBinding
 
 class WeatherDetailsFragment : Fragment() {
@@ -33,16 +34,17 @@ class WeatherDetailsFragment : Fragment() {
         val item = viewModel.selectedWeatherData
         if(item != null) {
             binding.weatherDetailsLocation.text = item.compositeTimeOfMeasurementLocation.location
+
             val temperature = "${item.temperature}${item.temperatureUnit}"
             binding.weatherDetailsTemperature.text = temperature
+
             binding.weatherDetailsTimeOfMeasurement.text = item.compositeTimeOfMeasurementLocation.timeOfMeasurement
 
-            var trend = "enako"
+            var trend = getString(R.string.temp_change_same)
             when {
-                (item.trend == -1) -> trend = "dol"
-                (item.trend == 1) -> trend = "gor"
+                (item.trend == -1) -> trend = getString(R.string.temp_change_down)
+                (item.trend == 1) -> trend = getString(R.string.temp_change_up)
             }
-
             binding.weatherDetailsTrend.text = trend
 
             if(item.weatherStateIconUrl != "") {
@@ -65,10 +67,7 @@ class WeatherDetailsFragment : Fragment() {
                 binding.weatherDetailsWindDirectionIcon.setImageDrawable(null)
                 binding.weatherDetailsWindSpeed.text = ""
                 binding.weatherDetailsWindDirection.text = ""
-
             }
-
-
         } else {
             findNavController().navigateUp()
         }

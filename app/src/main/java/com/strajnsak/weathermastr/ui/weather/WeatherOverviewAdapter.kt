@@ -1,6 +1,5 @@
 package com.strajnsak.weathermastr.ui.weather
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.strajnsak.weathermastr.R
 import com.strajnsak.weathermastr.data.entities.WeatherData
 import com.strajnsak.weathermastr.databinding.ItemWeatherBinding
 
@@ -51,6 +51,7 @@ class WeatherOverviewAdapter(private val listener: WeatherOverviewListener) :
 
     override fun onBindViewHolder(holder: WeatherOverviewViewHolder, position: Int) =
         holder.bind(getItem(position))
+
 }
 
 class WeatherOverviewViewHolder(
@@ -66,23 +67,24 @@ class WeatherOverviewViewHolder(
     }
 
     fun bind(item: WeatherData) {
+        val context = itemBinding.root.context
         this.weatherData = item
         itemBinding.weatherItemLocation.text = item.compositeTimeOfMeasurementLocation.location
-        itemBinding.root.setBackgroundColor(Color.parseColor("#AAAAAA"))
+        itemBinding.root.setBackgroundColor(context.getColor(R.color.weather_item_background_default))
         var average = ""
         if(item.averageLast30Minutes != null) {
-            average = "30 min povprečje ${item.averageLast30Minutes}${item.temperatureUnit}"
+            average = "${context.getString(R.string.average_30_minute)} ${item.averageLast30Minutes}${item.temperatureUnit}"
             if(item.averageLast30Minutes!! > 25) {
-                itemBinding.root.setBackgroundColor(Color.parseColor("#FFC57272"))
+                itemBinding.root.setBackgroundColor(context.getColor(R.color.weather_item_background_highlighted))
             }
         }
         itemBinding.weatherItem30minuteAverage.text = average
         val temperature = "${item.temperature}${item.temperatureUnit}"
         itemBinding.weatherItemTemperature.text = temperature
-        var trend = "enako"
+        var trend = context.getString(R.string.temp_change_same)
         when {
-            (item.trend == -1) -> trend = "dol"
-            (item.trend == 1) -> trend = "gor"
+            (item.trend == -1) -> trend = context.getString(R.string.temp_change_up)
+            (item.trend == 1) -> trend = context.getString(R.string.temp_change_down)
         }
         itemBinding.weatherItemTemperatureUpDown.text = trend
         itemBinding.weatherItemTimestamp.text =
@@ -107,9 +109,7 @@ class WeatherOverviewViewHolder(
             itemBinding.weatherItemWindDirectionIcon.setImageDrawable(null)
             itemBinding.weatherItemWindSpeed.text = ""
             itemBinding.weatherItemWindDirection.text = ""
-
         }
-
     }
 
     override fun onClick(v: View?) {

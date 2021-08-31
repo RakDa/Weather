@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:padding="5dp"
-    android:background="#AAAAAA">
+    android:background="@color/weather_item_background_default">
 
     <TextView
         android:id="@+id/weatherItemLocation"
@@ -55,8 +55,7 @@
         app:layout_constraintEnd_toStartOf="@id/weatherItemIcon"
         app:layout_constraintTop_toTopOf="@id/weatherItemIcon"
         app:layout_constraintBottom_toTopOf="@id/weatherItemTemperatureUpDown"
-        tools:text="35°C"
-        />
+        tools:text="35°C" />
 
     <TextView
         android:id="@+id/weatherItemTemperatureUpDown"
@@ -65,8 +64,7 @@
         app:layout_constraintEnd_toStartOf="@id/weatherItemIcon"
         app:layout_constraintTop_toBottomOf="@id/weatherItemTemperature"
         app:layout_constraintBottom_toBottomOf="@id/weatherItemIcon"
-        tools:text="gor"
-        />
+        tools:text="gor" />
 
     <ImageView
         android:id="@+id/weatherItemWindDirectionIcon"
@@ -84,8 +82,8 @@
         app:layout_constraintEnd_toStartOf="@id/weatherItemWindDirectionIcon"
         app:layout_constraintTop_toTopOf="@id/weatherItemIcon"
         app:layout_constraintBottom_toTopOf="@id/weatherItemWindDirection"
-        tools:text="5.5 m/s"
-        />
+        tools:text="5.5 m/s" />
+
     <TextView
         android:id="@+id/weatherItemWindDirection"
         android:layout_width="wrap_content"
@@ -93,7 +91,6 @@
         app:layout_constraintEnd_toStartOf="@id/weatherItemWindDirectionIcon"
         app:layout_constraintTop_toBottomOf="@id/weatherItemWindSpeed"
         app:layout_constraintBottom_toBottomOf="@id/weatherItemIcon"
-        tools:text="101°"
-        />
+        tools:text="101°" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

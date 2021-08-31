@@ -27,7 +27,7 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
     private var _binding: FragmentWeatherOverviewBinding? = null
     private val binding get() = _binding!!
     private val viewModel: WeatherViewModel by activityViewModels()
-    private lateinit var adapter: WeatherOverviewAdapter
+    private var adapter: WeatherOverviewAdapter? = null
 
 
     override fun onCreateView(
@@ -79,7 +79,7 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
                     .collect {
                     when (it){
                         is Resource.Success -> {
-                            adapter.setItems(it.data)
+                            adapter?.setItems(it.data)
                             viewModel.cacheWeatherData(it.data)
                             binding.weatherOverviewSwipeRefresh.isRefreshing = false
                         }
@@ -108,6 +108,7 @@ class WeatherOverviewFragment : Fragment(), WeatherOverviewAdapter.WeatherOvervi
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        adapter = null
     }
 
 }

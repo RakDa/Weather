@@ -18,7 +18,7 @@ class WeatherRemoteDataSource @Inject constructor(
         if (result is Resource.Success) {
             return Resource.Success(covertArsoDataXMLtoWeatherDataList(result.data))
         }
-        return Resource.Error((result as Resource.Error).message);
+        return Resource.Error((result as Resource.Error).message)
     }
 
     private val refreshIntervalMs: Long = 30000
