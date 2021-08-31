@@ -51,6 +51,6 @@ class WeatherRemoteDataSource @Inject constructor(
                 )
             )
         }
-        return weatherDataList;
+        return weatherDataList
     }
 }

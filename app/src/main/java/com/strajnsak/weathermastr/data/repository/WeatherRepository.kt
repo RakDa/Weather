@@ -34,7 +34,7 @@ class WeatherRepository @Inject constructor(
     private suspend fun getCachedWeatherData(): ResultWrapper<List<WeatherData>> {
         val latestWeatherData = weatherLocalDataSource.getLatestWeatherData()
         return if (latestWeatherData.isNotEmpty()) {
-            ResultWrapper.Success(latestWeatherData);
+            ResultWrapper.Success(latestWeatherData)
         } else {
             ResultWrapper.Error("Local data not available")
         }
