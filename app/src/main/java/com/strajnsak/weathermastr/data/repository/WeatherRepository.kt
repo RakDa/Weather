@@ -12,13 +12,55 @@ class WeatherRepository @Inject constructor(
 ) {
 
     suspend fun getLatestWeatherList(): ResultWrapper<List<WeatherData>> {
+        val cachedWeatherData: List<WeatherData>? = let {
+            when(val cache = getCachedWeatherData()) {
+                is ResultWrapper.Success -> cache.data
+                is ResultWrapper.Error -> null
+            }
+        }
         return when (val latestWeather = weatherRemoteDataSource.getLatestWeather()) {
             is ResultWrapper.Success -> {
-                cacheWeatherData(latestWeather.data)
-                latestWeather
+                val newWeatherData: List<WeatherData> = latestWeather.data
+                if(cachedWeatherData != null) {
+                    addTrendToNewWeatherData(cachedWeatherData, newWeatherData)
+                    addAverageTemperatureForPast30minutes(newWeatherData)
+                }
+                cacheWeatherData(newWeatherData)
+                ResultWrapper.Success(newWeatherData)
             }
             is ResultWrapper.Error ->
                 getCachedWeatherData()
+        }
+    }
+
+    private fun addTrendToNewWeatherData(oldWeatherDataList: List<WeatherData>, newWeatherDataList: List<WeatherData>){
+        for (oldWeatherData in oldWeatherDataList) {
+            for (newWeatherData in newWeatherDataList) {
+                if (oldWeatherData.compositeTimeOfMeasurementLocation.location == newWeatherData.compositeTimeOfMeasurementLocation.location) {
+                    when {
+                        oldWeatherData.temperature > newWeatherData.temperature -> {
+                            newWeatherData.trend = -1
+                        }
+                        oldWeatherData.temperature < newWeatherData.temperature -> {
+                            newWeatherData.trend = 1
+                        }
+                        else -> {
+                            newWeatherData.trend = 0
+                        }
+                    }
+                    break
+                }
+            }
+        }
+    }
+
+    private suspend fun addAverageTemperatureForPast30minutes(weatherDataList: List<WeatherData>){
+        for (weatherData in weatherDataList) {
+            if (cacheForLocationLast30minutesExists(weatherData.compositeTimeOfMeasurementLocation.location)) {
+                weatherData.averageLast30Minutes = getAverageTemperatureLast30minutesForLocation(
+                                weatherData.compositeTimeOfMeasurementLocation.location
+                        )
+            }
         }
     }
 

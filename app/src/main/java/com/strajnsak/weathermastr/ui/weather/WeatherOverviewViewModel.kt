@@ -18,46 +18,28 @@ class WeatherOverviewViewModel @Inject constructor(
 
     suspend fun getRepeatingWeatherDataFlow(): Flow<Resource<List<WeatherData>>> {
         val refreshIntervalMs: Long = 30000
-        return mapFlowData(
-                flow {
-                    while (true) {
-                        emit(Resource.Loading)
-                        when (val latestWeather = repository.getLatestWeatherList()) {
-                            is ResultWrapper.Success -> emit(Resource.Success(latestWeather.data))
-                            is ResultWrapper.Error -> emit(Resource.Error(latestWeather.message))
-                        }
-                        kotlinx.coroutines.delay(refreshIntervalMs)
-                    }
+        return flow {
+            while (true) {
+                emit(Resource.Loading)
+                when (val latestWeather = repository.getLatestWeatherList()) {
+                    is ResultWrapper.Success -> emit(Resource.Success(latestWeather.data))
+                    is ResultWrapper.Error -> emit(Resource.Error(latestWeather.message))
                 }
-        )
+                kotlinx.coroutines.delay(refreshIntervalMs)
+            }
+        }
+
     }
 
     suspend fun getForceRefreshWeatherDataFlow(): Flow<Resource<List<WeatherData>>> {
-        return mapFlowData(
-                flow {
-                    emit(Resource.Loading)
-                    when (val latestWeather = repository.getLatestWeatherList()) {
-                        is ResultWrapper.Success -> emit(Resource.Success(latestWeather.data))
-                        is ResultWrapper.Error -> emit(Resource.Error(latestWeather.message))
-                    }
-                }
-        )
-    }
-
-    private fun mapFlowData(flow: Flow<Resource<List<WeatherData>>>): Flow<Resource<List<WeatherData>>> {
-        return flow.map {
-            if (it is Resource.Success) {
-                for (weatherData in it.data) {
-                    if (repository.cacheForLocationLast30minutesExists(weatherData.compositeTimeOfMeasurementLocation.location)) {
-                        weatherData.averageLast30Minutes =
-                                repository.getAverageTemperatureLast30minutesForLocation(
-                                        weatherData.compositeTimeOfMeasurementLocation.location
-                                )
-                    }
-                }
-                Resource.Success(it.data)
-            } else it
+        return flow {
+            emit(Resource.Loading)
+            when (val latestWeather = repository.getLatestWeatherList()) {
+                is ResultWrapper.Success -> emit(Resource.Success(latestWeather.data))
+                is ResultWrapper.Error -> emit(Resource.Error(latestWeather.message))
+            }
         }
+
     }
 
 }

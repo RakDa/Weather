@@ -19,27 +19,6 @@ class WeatherOverviewAdapter(private val listener: WeatherOverviewListener) :
     }
 
     fun setItems(weatherData: List<WeatherData>) {
-        if (itemCount > 0) {
-            for (i in 0 until itemCount) {
-                val oldWeatherData = getItem(i)
-                for (newWeatherData in weatherData) {
-                    if (oldWeatherData.compositeTimeOfMeasurementLocation.location == newWeatherData.compositeTimeOfMeasurementLocation.location) {
-                        when {
-                            oldWeatherData.temperature > newWeatherData.temperature -> {
-                                newWeatherData.trend = -1
-                            }
-                            oldWeatherData.temperature < newWeatherData.temperature -> {
-                                newWeatherData.trend = 1
-                            }
-                            else -> {
-                                newWeatherData.trend = 0
-                            }
-                        }
-                        break
-                    }
-                }
-            }
-        }
         submitList(weatherData)
     }
 
@@ -74,7 +53,7 @@ class WeatherOverviewViewHolder(
         var average = ""
         if(item.averageLast30Minutes != null) {
             average = "${context.getString(R.string.average_30_minute)} ${item.averageLast30Minutes}${item.temperatureUnit}"
-            if(item.averageLast30Minutes!! > 25) {
+            if(item.isAverageFor30minutesMoreThen25()) {
                 itemBinding.root.setBackgroundColor(context.getColor(R.color.weather_item_background_highlighted))
             }
         }

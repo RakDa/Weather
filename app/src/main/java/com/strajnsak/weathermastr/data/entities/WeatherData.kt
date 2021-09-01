@@ -19,7 +19,14 @@ data class WeatherData(
         val insertionTimeInMilliseconds: Long,
         var trend: Int, // -1 down, 0 same, 1 up
         var averageLast30Minutes: Int?
-)
+) {
+        fun isAverageFor30minutesMoreThen25(): Boolean{
+                averageLast30Minutes?.let {
+                        return it > 25
+                }
+                return false
+        }
+}
 
 
 data class CompositeTimeOfMeasurementLocation(

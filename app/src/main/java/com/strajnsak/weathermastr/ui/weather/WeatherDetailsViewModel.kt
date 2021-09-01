@@ -25,16 +25,6 @@ class WeatherDetailsViewModel @Inject constructor(
                 is ResultWrapper.Success -> emit(Resource.Success(latestWeatherForLocation.data))
                 is ResultWrapper.Error -> emit(Resource.Error(latestWeatherForLocation.message))
             }
-        }.map {
-            if (it is Resource.Success) {
-                if (repository.cacheForLocationLast30minutesExists(it.data.compositeTimeOfMeasurementLocation.location)) {
-                    it.data.averageLast30Minutes =
-                            repository.getAverageTemperatureLast30minutesForLocation(
-                                    it.data.compositeTimeOfMeasurementLocation.location
-                            )
-                }
-                Resource.Success(it.data)
-            } else it
         }
     }
 }
