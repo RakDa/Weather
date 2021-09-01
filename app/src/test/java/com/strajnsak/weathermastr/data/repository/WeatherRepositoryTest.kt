@@ -1,5 +1,6 @@
 package com.strajnsak.weathermastr.data.repository
 
+import com.strajnsak.weathermastr.data.entities.CompositeTimeOfMeasurementLocation
 import com.strajnsak.weathermastr.data.entities.WeatherData
 import com.strajnsak.weathermastr.data.local.WeatherDataDao
 import com.strajnsak.weathermastr.data.remote.WeatherRemoteDataSource
@@ -17,13 +18,33 @@ class WeatherRepositoryTest {
         val weatherLocalDataSource: WeatherDataDao = mock()
         val weatherRepository = WeatherRepository(weatherRemoteDataSource, weatherLocalDataSource)
 
-        val newWeatherData: WeatherData = mock()
-        whenever(newWeatherData.compositeTimeOfMeasurementLocation.location).thenReturn("Maribor")
-        whenever(newWeatherData.temperature).thenReturn(20)
+        val newWeatherData = WeatherData(
+                CompositeTimeOfMeasurementLocation("Maribor", ""),
+                "",
+                "",
+                20,
+                0,
+                "",
+                "",
+                "",
+                0,
+                0,
+                0
+        )
 
-        val oldWeatherData: WeatherData = mock()
-        whenever(oldWeatherData.compositeTimeOfMeasurementLocation.location).thenReturn("Maribor")
-        whenever(oldWeatherData.temperature).thenReturn(15)
+        val oldWeatherData = WeatherData(
+                CompositeTimeOfMeasurementLocation("Maribor", ""),
+                "",
+                "",
+                15,
+                0,
+                "",
+                "",
+                "",
+                0,
+                0,
+                0
+        )
 
         val newWeatherDataList: List<WeatherData> = listOf(newWeatherData)
         val oldWeatherDataList: List<WeatherData> = listOf(oldWeatherData)
