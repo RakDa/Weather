@@ -1,5 +1,6 @@
 package com.strajnsak.weathermastr.data.repository
 
+import androidx.annotation.VisibleForTesting
 import com.strajnsak.weathermastr.data.entities.WeatherData
 import com.strajnsak.weathermastr.data.local.WeatherDataDao
 import com.strajnsak.weathermastr.data.remote.WeatherRemoteDataSource
@@ -33,7 +34,8 @@ class WeatherRepository @Inject constructor(
         }
     }
 
-    private fun addTrendToNewWeatherData(oldWeatherDataList: List<WeatherData>, newWeatherDataList: List<WeatherData>){
+    @VisibleForTesting
+    public fun addTrendToNewWeatherData(oldWeatherDataList: List<WeatherData>, newWeatherDataList: List<WeatherData>){
         for (oldWeatherData in oldWeatherDataList) {
             for (newWeatherData in newWeatherDataList) {
                 if (oldWeatherData.compositeTimeOfMeasurementLocation.location == newWeatherData.compositeTimeOfMeasurementLocation.location) {
